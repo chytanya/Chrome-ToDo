@@ -1,0 +1,422 @@
+<link href="css/popup.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script> 
+<script type="text/javascript" src="js/jquery.watermark.js"></script>
+
+<script type="text/javascript" src="js/date.js"></script>
+<script type="text/javascript" src="js/jquery.datePicker.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="css/datePicker.css">
+<script type="text/javascript" charset="utf-8">
+    Date.format = 'yyyy-mm-dd';
+    $(function()
+    {
+        $('.date-pick').datePicker().val(new Date().asString()).trigger('change');
+    });
+</script>
+
+<div id="registrationPanel">
+        <span>Register for an Account:</span><br /><br />
+        <input type="text" name="usernameReg" id="usernameReg" title="Username" class="jq_watermark" /><br />
+        <input type="password" name="passwordReg" id="passwordReg" title="Password" class="jq_watermark" /><br />
+        <input type="text" name="emailReg" id="emailReg" title="Email" class="jq_watermark" /><br />
+        <div style="float:left;">
+            <input id="registerButton" class="todoBtn" type="submit" value="Create">
+        </div>
+        <div id="toLoginPage" class="createNewAccount" style="float:left;">
+            <a href="#">Back to Login page</a>
+        </div>
+        <div style="clear:both;"></div>
+        <pre><div id="registrationResult"></div></pre>
+</div>
+
+<div id="loginPanel">
+        <span>Account Login:</span><br /><br />
+        <input type="text" name="username" id="username" title="Username" class="jq_watermark" /><br />
+        <input type="password" name="password" id="password" title="Password" class="jq_watermark" /><br />
+        <div style="float:left;"><input id="loginButton" class="todoBtn" type="submit" value="Login"><br /></div>
+        <div id="toRegistrationPage" class="createNewAccount" style="float:left;"><a href="#">Create a new account</a></div>
+        <div style="clear:both;"></div>
+        <pre><div id="loginResult"></div></pre>
+</div>
+
+<div id="taskPanel">
+    <div style="float:left;width:80%;">
+            <input type="text" value="" id="newTaskText"  title="Create new task here.." class="jq_watermark" />
+    </div>
+    <div style="float:left;width:20%;">
+    </div>
+    <div style="clear:both;"></div>
+    
+    <div style="float:left;">
+        <input name="date" id="date" class="date-pick" />
+        <input type="submit" value="Create" id="create" class="todoBtn" />
+    </div>
+    <div class="optionsBar">
+    <div style="float:right;">
+        <ul class="menu">
+            <li><input type="submit" value="Show All" id="showAll" class="optionsBtn" /></li>
+            <li><input type="submit" value="Today" id="showToday" class="optionsBtn" /</li>
+            <li><input type="submit" value="Important" id="showImportant" class="optionsBtn" /></li>
+        </ul>
+    </div>
+    </div>
+    <div style="clear:both;"></div>
+ 
+<pre>
+<code>
+    <div id="tasks"><table id='allTasks'><tbody></tbody></table></div>
+    <div id="result"></div> 
+</code>
+</pre>
+
+
+<div style="float:left;">
+    <input type="text" id="txtSearch" name="txtSearch" title="Search.." class="jq_watermark" />    
+</div>    
+<div id="logout" class="optionsBtn" style="float:right;">
+    <input type="submit" value="Logout" />
+</div>
+<div style="clear:both;">
+
+<script>
+
+    $(document).ready(function($) {
+
+    if(localStorage["user_name"]){
+    
+        $('#loginPanel').hide();
+        $('#registrationPanel').hide();
+        $.ajax({
+        url: "http://aagqxtu4.facebook.joyent.us/chytanya/todo/index.php",
+            data: 'command=' + 'getAllIncompleteTasks' + "&" + 'uid=' + localStorage["user_name"],
+            cache: false,
+			  success: function(allTasks) {
+			    $('#allTasks').html(allTasks);
+            }
+        });
+    }
+    else{
+        $('#taskPanel').hide();
+        $('#registrationPanel').hide();
+    }
+    
+    $.updnWatermark.attachAll({ cssClass: "updnWatermark" });
+
+    });
+
+</script>
+
+<script>
+var redDotBtn_html = '<img class="redDotBtn" src="images/redDot.png"></img>';
+var greenDotBtn_html =  '<img class="greenDotBtn" src="images/greenDot.png"></img>';
+var deleteBtn_html = '<img class="deleteBtn" src="images/delete.png"></img>';
+var completeBtn_html = '<img class="completeBtn" src="images/complete.png"></img>';
+
+var d = new Date();
+var curr_date = d.getDate();
+var curr_month = d.getMonth();
+var curr_year = d.getFullYear();
+
+
+
+$('#newTaskText').keyup(function(e) {
+	if(e.keyCode == 13) {
+         $('#create').trigger('click');
+	}
+});
+
+$('#create').click(function() {
+            
+            //var is_important = $('#impChkBox:checked').val() ;
+            var todo_text = $('#newTaskText').val();
+            //var due_date = $('#duedate').val() ;
+            var due_date = $('#date').val() ;
+            if(!due_date){
+                due_date = curr_year + "-" + curr_month+ "-" + curr_date;
+            }
+            var uid = localStorage.user_name;
+            var imp = "0";
+            var complete = "0";
+            var newId = "nil";
+            var imp_html = "";
+            
+            if(imp){
+                imp_html = greenDotBtn_html;
+            } else {
+                imp_html = redDotBtn_html;
+            }
+            
+            
+			$.ajax({
+			  url: "http://aagqxtu4.facebook.joyent.us/chytanya/todo/index.php",
+            data: 'command=' + 'create' + "&" + 'todo_text=' + todo_text + "&" + 'uid=' + uid + "&" + 'due_date=' + due_date + "&" + 'is_important=' + imp + "&" + 'complete=' + complete,
+			  success: function(result) {
+                var data = eval('(' + result + ')');
+				if(data['id'] != -1){
+                    $('#result').html(data['success_code']);
+                    $('#result').fadeOut(5000);
+                    newId = data['id'];
+            
+                    $('#result').html(newId);
+                       
+            
+            
+                    $('#allTasks').prepend("<tr id='" + newId  + "'><td id='impData'>" + imp_html + '</td><td id="textData">'+ todo_text +'</td><td id="dateData">'+ due_date  +'</td><td id="compBtnData">'+ completeBtn_html +'</td><td id="delBtnData">'+  deleteBtn_html +'</td></tr>');
+            
+                    $('#newTaskText').val("");
+                    
+                    
+                }
+                else{
+                    $('#result').html(data['success_code']);
+                    $('#result').fadeOut(5000);
+                }
+			}
+        });
+});
+        
+        
+$("table td img.deleteBtn").live('click', function () {
+            
+            var taskid = $(this).parent().parent().attr('id') ;
+            //remove the task on front-end
+            $(this).parent().parent().remove();
+        
+			//deleting the task on back-end
+            $.ajax({
+			  url: "http://aagqxtu4.facebook.joyent.us/chytanya/todo/index.php",
+            data: "command=" + "deleteTask" + "&id=" + taskid,
+			  success: function(result) {
+			    $('#result').html(result);
+                //$('#result').fadeOut(5000);
+              }
+			});
+
+});
+
+
+
+$("table td img.completeBtn").live('click', function () {
+            
+            var taskid = $(this).parent().parent().attr('id') ;
+            //remove the task on front-end
+            $(this).parent().parent().remove();
+      
+			//marking task as done on back-end
+            $.ajax({
+			  url: "http://aagqxtu4.facebook.joyent.us/chytanya/todo/index.php",
+            data: "command=" + "markTaskComplete" + "&id=" + taskid,
+			  success: function(data) {
+			    $('#result').html(data);
+                //$('#result').fadeOut(5000);
+                }
+			});
+});
+
+
+$("table td img.redDotBtn").live('click', function () {
+            
+            var taskid = $(this).parent().parent().attr('id') ;
+            $('#result').html(taskid);
+            //updating task importance on front-end
+            $(this).parent().html(greenDotBtn_html);
+      
+			//updating task importance on back-end
+            $.ajax({
+			  url: "http://aagqxtu4.facebook.joyent.us/chytanya/todo/index.php",
+            data: "command=" + "updateImportance" + "&id=" + taskid + "&is_important=" + "0",
+            cache: false,
+			  success: function(data) {
+			    $('#result').html(data);
+                $('#result').fadeOut(5000);
+              }
+			});
+
+});
+
+$("table td img.greenDotBtn").live('click', function () {
+            
+            var taskid = $(this).parent().parent().attr('id') ;
+            $('#result').html(taskid);
+            
+            //updating task importance on front-end
+            $(this).parent().html(redDotBtn_html);
+      
+			//updating task importance on back-end
+            $.ajax({
+			  url: "http://aagqxtu4.facebook.joyent.us/chytanya/todo/index.php",
+            data: "command=" + "updateImportance" + "&id=" + taskid + "&is_important=" + "1",
+            cache: false,
+			  success: function(data) {
+			    $('#result').html(data);
+                $('#result').fadeOut(5000);
+              }
+			});
+
+});  
+</script>
+
+
+
+<script type="text/javascript">
+
+function resetSearch() {
+    $('#txtSearch').val('');
+    $('#allTasks tr').show();
+    $('.norecords').remove();
+    $('#txtSearch').focus();
+}
+
+// cancel search on ESC key
+$('#txtSearch').keyup(function(event) {
+if (event.keyCode == 27) {
+        resetSearch();
+    }
+});
+
+// case insensitive contains extension - move this extension to jquery file
+$.extend($.expr[":"], {
+    "containsNC": function(elem, i, match, array) {
+        return (elem.textContent || elem.innerText || "").toLowerCase
+().indexOf((match[3] || "").toLowerCase()) >= 0;
+    }
+});
+
+
+// execute the search
+$('#txtSearch').keyup(function() {
+    
+    if ($('#txtSearch').val().length > 2) {
+        $('#allTasks tr').hide();
+        $('#allTasks tr td:containsNC("' + $('#txtSearch').val() + '")').parent().show();
+    }
+    else if ($('#txtSearch').val().length == 0) {
+        resetSearch();
+    }
+ 
+    if ($('#allTasks tr').length == 1) {
+        $('.norecords').remove();
+        $('#allTasks').append('<tr class="norecords"><td colspan="5" class="Normal">No records were found</td></tr>');
+    }
+});
+
+
+
+$('#showToday').click(function() {
+    
+    $('#allTasks tr').hide();
+    $('#allTasks tr td:containsNC("' + new Date().asString() + '")').parent().show();
+ 
+});
+
+
+$('#showImportant').click(function() {
+    
+    $('#allTasks tr td img.greenDotBtn').parent().parent().hide();
+    $('#allTasks tr td img.redDotBtn').parent().parent().show();
+
+});
+
+$('#showAll').click(function() {
+    
+    $('#allTasks tr').show();
+
+});
+
+
+</script>
+
+
+
+<script>
+
+// SCRIPT TO VALIDATE USER CREDENTIALS AND STORE THE LOGIN INFO IN LOCALSTORAGE
+
+$('#loginButton').click(function() {
+
+var username = $('#username').val();
+
+    $.ajax({
+        url: "http://aagqxtu4.facebook.joyent.us/chytanya/login/index.php",
+            data: 'command=' + 'validateLogin' + "&" + 'user_name=' + $('#username').val() + "&" + 'password=' + $('#password').val(),
+            cache: false,
+			  success: function(result) {
+              
+                var data = eval('(' + result + ')');
+				if(data['success_code'] == 1){
+					$('#loginResult').html("Successful Login!");
+                    localStorage["user_name"] = username;
+                    location.reload();
+				}
+				else if(data['success_code'] == 2){
+					$('#loginResult').html("Login Failed!!");
+					localStorage["user_name"] = "";
+				}
+				else if(data['success_code'] == 3){
+			 		$('#loginResult').html("User not found!");
+			 		localStorage["user_name"] = "";
+				}
+				else{
+					$('#loginResult').html("Something went wrong!!");
+					localStorage["user_name"] = "";
+				}	
+			  }
+		});
+
+});
+
+// END LOGIN VALIDATION SCRIPT
+
+$('#logout').click(function() {
+
+    localStorage["user_name"] = "";
+    location.reload();
+
+});
+
+</script>
+
+<script>
+
+// SCRIPT TO REGISTER A NEW USER FOR THE TODO SYSTEM WITH USERNAME, EMAIL AND A PASSWORD
+
+$('#registerButton').click(function() {
+
+    $.ajax({
+        url: "http://aagqxtu4.facebook.joyent.us/chytanya/login/index.php",
+            data: 'command=' + 'createuser' + "&" + 'user_name=' + $('#usernameReg').val() + "&" + 'password=' + $('#passwordReg').val()+ "&" + 'email=' + $('#emailReg').val(),
+            cache: false,
+			  success: function(result) {
+                if(result){
+                    localStorage["user_name"] = $('#username').val();
+                    location.reload();
+                    $('#registrationResult').html("User account created Successfully!");
+                }
+                else{
+                    $('#registrationResult').html("User registration failed!!");
+                }
+			  }
+		});
+
+});
+
+// END USER REGISTRATION SCRIPT
+
+
+$('#toRegistrationPage').click(function() {
+    $('#loginPanel').hide();
+    $('#registrationPanel').show();
+    $('#taskPanel').hide();
+});
+
+$('#toLoginPage').click(function() {
+    $('#loginPanel').show();
+    $('#registrationPanel').hide();
+    $('#taskPanel').hide();
+});
+
+</script>
+
+
+
+
+

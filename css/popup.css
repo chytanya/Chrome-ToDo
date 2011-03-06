@@ -1,0 +1,278 @@
+body {
+    min-width:600px;
+    min-height: 700px;
+    overflow-x:hidden;
+    overflow-y:hidden;
+    background: #474747 url(images/bg.png);
+    color: #FFF; 
+    font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+    font-size: 14px;
+    margin-top: .5em; color: #666;
+    padding-right:10px;
+}
+
+img {
+  margin:1px;
+  border:0.5px bevel black;
+  vertical-align:middle;
+  width:26px;
+  height:26px;
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+	margin: 2px;
+	font-size: 1.1em;
+}
+ 
+th {
+	background: #3e83c9;
+	color: #eee;
+	padding: 2px 8px;
+	text-align: middle;
+	border-right: 1px solid #fff;
+	line-height: 2.0;
+}
+ 
+td {
+    font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+	border-bottom: 1px solid #000;
+	vertical-align: center;
+    font-size: 12px;
+    color: #F0F0F0;
+}
+
+#impData, delBtnData, compBtnData {
+    width: 10px;
+    }
+    
+#textData {
+    width: 470px;
+    }
+    
+#dateData {
+    width: 100px;
+    }
+    
+ 
+td * {
+	padding: 2px 8px;
+}
+ 
+tr.alt td {
+	background: #ecf6fc;
+}
+ 
+tr.over td, tr:hover td {
+	background: #111;
+}
+    
+
+pre, #txtSearch, #newTaskText, #date {
+    background:#222;
+	font-size: 12px; 
+    text-shadow: 0px 2px 3px #171717;
+	-webkit-box-shadow: 0px 2px 3px #555;
+	-moz-box-shadow: 0px 2px 3px #555;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+}
+
+#txtSearch, #newTaskText, #date{
+    border: none;
+    color:white;
+}
+#txtSearch {
+    margin-top: 3px;
+    width: 250px;
+    height: 26px;
+}
+
+#newTaskText{
+    padding: 6px 10px;
+    width: 600px;
+    height: 35px;
+}
+
+#date {
+    width:100px;
+    height: 26px;
+    margin-top: 3px;
+    text-align:center;
+    color:white;
+}
+
+
+textarea {
+    border:0px solid #ccc;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    -khtml-border-radius:10px;
+    background:#F3FFCF;
+    width:100%;
+    font-size:18px;
+
+}
+
+textarea:focus{
+	outline:none;
+	background-color:#F3FFCF;
+}
+
+#search {
+    padding: 5px;
+}
+
+
+#result{
+    text-align:center;
+    font-weight:bold;
+    font-size:14px;
+    color:white;
+}
+
+.todoBtn {
+	padding: 6px 10px;
+    -webkit-border-radius: 6px 6px;
+    border: solid 1px rgb(153, 153, 153);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(255, 255, 255)), to(rgb(221, 221, 221)));
+    color: #333;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    text-shadow: 0px 1px 1px rgba(255,255,255,1);
+    line-height: 1;
+    height:30px;
+}
+
+.todoBtn:hover {
+	text-decoration: none;
+}
+.todoBtn:active {
+	position: relative;
+}
+
+#create{
+    padding: 5px;
+    width: 60px;
+    height: 25px;
+    background:black;
+    color:white;
+    border:none;
+    text-shadow: none;
+
+}
+
+#registerButton, #loginButton {
+    width: 100px;
+    height: 30px;
+    font-size: 14px;
+    margin-top:15px;
+}
+
+#optionsBar{
+    padding: 6px 10px;
+}
+.updnWatermark {
+    color: #333;
+    font-family: Sans-Serif;
+    font-size: small;
+    font-style: italic;
+    padding: 2px;
+}
+
+#username, #password, #email, #usernameReg, #passwordReg, #emailReg {
+
+    padding:20px;
+    margin-top:10px;
+    -webkit-border-radius: 6px 6px;
+    border: solid 1px rgb(153, 153, 153);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(255, 255, 255)), to(rgb(221, 221, 221)));
+    color: #333;
+    height:30px;
+    width:300px;
+    font-size: 18px;
+}
+
+#registrationPanel, #loginPanel{
+    padding:15px;
+    width:60%;
+    margin-left:120px;
+    color:white;
+}
+
+#registrationPanel{
+    margin-top: 100px;
+}
+
+#loginPanel {
+    margin-top: 150px;
+}
+
+.createNewAccount {
+    margin-top: 28px;
+    margin-left: 10px;
+    font-size: 12px;
+}
+
+.optionsBar {
+
+}
+
+li {
+    display: inline;
+    list-style: none;
+}
+ 
+li a {
+    border: 0.5px solid black;
+    text-decoration: none;
+    color:black;
+}
+
+.optionsBtn {
+    border:none;
+    padding: 5px 5px;
+    background:#222;
+	font-size: 12px; 
+    text-shadow: 0px 2px 2px #000;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+    color:white;    
+}
+
+.menu {
+    margin-top: 0px;
+}
+
+a:link {
+    color: #CCC;
+}
+a:visited {
+    color: #CCCCCC;
+}
+a:hover {
+    color: #FFFFFF;
+    background-color: #333333;
+    text-decoration: none;
+}
+a:active {
+    color: #333333;
+}
+
+a.dp-choose-date {
+	float: left;
+	width: 16px;
+	height: 16px;
+	padding: 0;
+	margin: 5px 3px 0;
+	display: block;
+	text-indent: -2000px;
+	overflow: hidden;
+	background: url(../images/calendar.png) no-repeat; 
+}
+a.dp-choose-date.dp-disabled {
+	cursor: default;
+}
